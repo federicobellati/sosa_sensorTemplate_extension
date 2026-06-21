@@ -1,0 +1,161 @@
+@prefix ososa:      <https://w3id.org/ocean-sosa/> .
+@prefix sosa:       <http://www.w3.org/ns/sosa/> .
+@prefix ssn:        <http://www.w3.org/ns/ssn/> .
+@prefix ssn-system: <http://www.w3.org/ns/ssn/systems/> .
+@prefix schema:     <https://schema.org/> .
+@prefix qudt:       <http://qudt.org/schema/qudt/> .
+@prefix unit:       <http://qudt.org/vocab/unit/> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:       <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Sensor model
+#################################################################
+
+ososa:SensorModel
+    a owl:Class ;
+    rdfs:label "Sensor model"@en ;
+    rdfs:label "Modello di sensore"@it ;
+    rdfs:subClassOf schema:ProductModel ;
+    skos:definition
+        "A reusable product model, design, commercial type, or technical specification of a sensor. It is not itself the observation-making entity."@en ,
+        "Modello di prodotto, progetto, tipo commerciale o specifica tecnica riutilizzabile di un sensore. Non è esso stesso l'entità che effettua osservazioni."@it ;
+    owl:disjointWith sosa:Sensor ;
+    rdfs:isDefinedBy ososa: .
+
+#################################################################
+# Sensor model component
+#################################################################
+
+ososa:SensorModelComponent
+    a owl:Class ;
+    rdfs:label "Sensor model component"@en ;
+    rdfs:label "Componente del modello di sensore"@it ;
+    rdfs:subClassOf ssn:System ;
+    skos:definition
+        "A nominal subsystem, component, measurement channel, module, or functional part specified as part of a SensorModel."@en ,
+        "Sottosistema nominale, componente, canale di misura, modulo o parte funzionale specificata come parte di un SensorModel."@it ;
+    skos:scopeNote
+        "Use this class to describe model-level components such as temperature, conductivity, pressure, oxygen, power, communication, or processing components. Concrete deployed components should be represented separately at instance level."@en ,
+        "Usare questa classe per descrivere componenti a livello di modello, ad esempio componenti di temperatura, conducibilità, pressione, ossigeno, alimentazione, comunicazione o processamento. I componenti concreti dispiegati dovrebbero essere rappresentati separatamente a livello di istanza."@it ;
+    rdfs:isDefinedBy ososa: .
+
+#################################################################
+# Optional subclasses
+#################################################################
+
+ososa:SensingComponent
+    a owl:Class ;
+    rdfs:label "Sensing component"@en ;
+    rdfs:label "Componente di misura"@it ;
+    rdfs:subClassOf ososa:SensorModelComponent ;
+    skos:definition
+        "A SensorModelComponent that specifies a nominal sensing function for one or more observable properties."@en ,
+        "Componente del modello di sensore che specifica una funzione nominale di misura per una o più proprietà osservabili."@it ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:ProcessingComponent
+    a owl:Class ;
+    rdfs:label "Processing component"@en ;
+    rdfs:label "Componente di processamento"@it ;
+    rdfs:subClassOf ososa:SensorModelComponent ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:CommunicationComponent
+    a owl:Class ;
+    rdfs:label "Communication component"@en ;
+    rdfs:label "Componente di comunicazione"@it ;
+    rdfs:subClassOf ososa:SensorModelComponent ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:PowerComponent
+    a owl:Class ;
+    rdfs:label "Power component"@en ;
+    rdfs:label "Componente di alimentazione"@it ;
+    rdfs:subClassOf ososa:SensorModelComponent ;
+    rdfs:isDefinedBy ososa: .
+
+#################################################################
+# Properties
+#################################################################
+
+ososa:hasSensorModel
+    a owl:ObjectProperty ;
+    rdfs:label "has sensor model"@en ;
+    rdfs:label "ha modello di sensore"@it ;
+    rdfs:domain sosa:Sensor ;
+    rdfs:range ososa:SensorModel ;
+    skos:definition
+        "Relates a concrete sensor instance to the reusable SensorModel that characterizes it."@en ,
+        "Collega una istanza concreta di sensore al SensorModel riutilizzabile che la caratterizza."@it ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:designedToObserve
+    a owl:ObjectProperty ;
+    rdfs:label "designed to observe"@en ;
+    rdfs:label "progettato per osservare"@it ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf (
+            ososa:SensorModel
+            ososa:SensorModelComponent
+        )
+    ] ;
+    rdfs:range sosa:ObservableProperty ;
+    skos:definition
+        "Relates a SensorModel or SensorModelComponent to an observable property it is designed, specified, or declared to observe."@en ,
+        "Collega un SensorModel o un SensorModelComponent a una proprietà osservabile che esso è progettato, specificato o dichiarato per osservare."@it ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:hasDefaultUnit
+    a owl:ObjectProperty ;
+    rdfs:label "has default unit"@en ;
+    rdfs:label "ha unità predefinita"@it ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf (
+            ososa:SensorModel
+            ososa:SensorModelComponent
+        )
+    ] ;
+    rdfs:range qudt:Unit ;
+    skos:definition
+        "Relates a SensorModel or SensorModelComponent to the default unit of measurement used for a declared observable property."@en ,
+        "Collega un SensorModel o un SensorModelComponent all'unità di misura predefinita usata per una proprietà osservabile dichiarata."@it ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:hasModelCapability
+    a owl:ObjectProperty ;
+    rdfs:label "has model capability"@en ;
+    rdfs:label "ha capacità nominale del modello"@it ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf (
+            ososa:SensorModel
+            ososa:SensorModelComponent
+        )
+    ] ;
+    rdfs:range ssn-system:SystemCapability ;
+    skos:definition
+        "Relates a SensorModel or SensorModelComponent to a nominal capability specification, such as accuracy, precision, resolution, sensitivity, or selectivity."@en ,
+        "Collega un SensorModel o un SensorModelComponent a una specifica nominale di capacità, ad esempio accuratezza, precisione, risoluzione, sensibilità o selettività."@it ;
+    rdfs:isDefinedBy ososa: .
+
+ososa:hasModelOperatingRange
+    a owl:ObjectProperty ;
+    rdfs:label "has model operating range"@en ;
+    rdfs:label "ha intervallo operativo nominale del modello"@it ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf (
+            ososa:SensorModel
+            ososa:SensorModelComponent
+        )
+    ] ;
+    rdfs:range ssn-system:OperatingRange ;
+    skos:definition
+        "Relates a SensorModel or SensorModelComponent to a nominal operating range."@en ,
+        "Collega un SensorModel o un SensorModelComponent a un intervallo operativo nominale."@it ;
+    rdfs:isDefinedBy ososa: .
