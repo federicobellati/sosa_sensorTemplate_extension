@@ -1,0 +1,1 @@
+# sosa_sensorTemplate_extension
